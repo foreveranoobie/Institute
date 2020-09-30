@@ -1,0 +1,7 @@
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\bin\Debug\InfoCollector.exe.config
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\bin\Debug\InfoCollector.exe
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\bin\Debug\InfoCollector.pdb
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Debug\InfoCollector.csprojAssemblyReference.cache
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Debug\InfoCollector.csproj.CoreCompileInputs.cache
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Debug\InfoCollector.exe
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Debug\InfoCollector.pdb

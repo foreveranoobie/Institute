@@ -1,0 +1,6 @@
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\bin\Release\InfoCollector.exe.config
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\bin\Release\InfoCollector.exe
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\bin\Release\InfoCollector.pdb
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Release\InfoCollector.csproj.CoreCompileInputs.cache
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Release\InfoCollector.exe
+E:\Institute\Програмни засоби ЗИ\mylabs\lab3\InfoCollector\InfoCollector\obj\Release\InfoCollector.pdb
