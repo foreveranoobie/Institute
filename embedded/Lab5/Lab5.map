@@ -1,0 +1,44 @@
+MPLINK 4.49, Linker
+Linker Map File - Created Tue Dec 22 11:12:52 2020
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000010
+                   .org_2       code   0x0000dd    program   0x000014
+                   .org_3       code   0x00014b    program   0x000016
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000007      
+                            0x0000dd    0x0000e6      
+                            0x00014b    0x000155      
+            29 out of 1093 program addresses used, program memory utilization is 2%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     Loop   0x00014d    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                   finish   0x000155    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                       m1   0x000151    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                    proc1   0x000003    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                    proc3   0x00014b    program     static E:\Institute\embedded\Lab5\Lab5.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    proc1   0x000003    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                    proc3   0x00014b    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                     Loop   0x00014d    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                       m1   0x000151    program     static E:\Institute\embedded\Lab5\Lab5.asm
+                   finish   0x000155    program     static E:\Institute\embedded\Lab5\Lab5.asm
+
+

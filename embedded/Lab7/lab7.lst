@@ -1,0 +1,344 @@
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 #include <p16f84.inc>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84 processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00206         LIST
+                      00002 
+                      00003 EEPROM_WRITE MACRO
+                      00004 
+                      00005         BSF     STATUS, RP0             ; BANK 1
+                      00006         BSF     EECON1, WREN            ; EN WR
+                      00007         
+                      00008         MOVLW   0X55
+                      00009         MOVWF   EECON2
+                      00010         MOVLW   0XAA
+                      00011         MOVWF   EECON2
+                      00012         
+                      00013         BSF     EECON1, WR                      ; START WR      
+                      00014         BCF     EECON1, WREN
+                      00015         BCF     STATUS, RP0             ; BANK 0
+                      00016         
+                      00017         ENDM
+                      00018 
+  0000000C            00019 TEMP    EQU 0X0C
+  00000021            00020 N               EQU 21
+                      00021 
+0000                  00022 RESET_VECTOR
+0000                  00023         ORG     0
+0000   2835           00024         GOTO    ENTRY_POINT
+                      00025         
+0001                  00026 INT_VECTOR
+0004                  00027         ORG     4
+                      00028         
+0004   188B           00029         BTFSC   INTCON, INTF
+0005   200F           00030         CALL    INTRB0
+                      00031         
+0006   180B           00032         BTFSC   INTCON, RBIF
+0007   2018           00033         CALL    INTRB47
+                      00034         
+0008   190B           00035         BTFSC   INTCON, T0IF
+0009   201F           00036         CALL    INTTMR0
+                      00037         
+000A   1683           00038         BSF     STATUS, RP0             ; BANK 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   1A08           00039         BTFSC   EECON1, EEIF
+000C   2024           00040         CALL    INTEEPROM
+000D   1283           00041         BCF     STATUS, RP0             ; BANK 0
+                      00042 
+000E   0009           00043         RETFIE
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00044         
+000F                  00045 INTRB0
+000F   3000           00046         MOVLW   0x00
+Warning[224]: Use of this instruction is not recommended.
+0010   0066           00047         TRIS    PORTB
+                      00048         
+0011   3021           00049         MOVLW   N
+0012   008C           00050         MOVWF   TEMP            
+0013   0086           00051         MOVWF   PORTB
+                      00052         
+0014   30FF           00053         MOVLW   0XFF
+Warning[224]: Use of this instruction is not recommended.
+0015   0066           00054         TRIS    PORTB
+                      00055         
+0016   108B           00056         BCF     INTCON, INTF
+0017   0008           00057         RETURN
+                      00058         
+                      00059 ; PORTA = PORTB
+0018                  00060 INTRB47
+                      00061         ; LO PART
+0018   0806           00062         MOVF    PORTB, W
+0019   0085           00063         MOVWF   PORTA
+                      00064         ; HI PART
+001A   008C           00065         MOVWF   TEMP
+001B   0E0C           00066         SWAPF   TEMP, W
+001C   0085           00067         MOVWF   PORTA
+                      00068         
+001D   100B           00069         BCF     INTCON, RBIF
+001E   0008           00070         RETURN
+                      00071         
+001F                  00072 INTTMR0
+001F   0985           00073         COMF    PORTA, F
+0020   306A           00074         MOVLW   .256-.150
+0021   0081           00075         MOVWF   TMR0
+                      00076         
+0022   110B           00077         BCF     INTCON, T0IF
+0023   0008           00078         RETURN
+                      00079 
+0024                  00080 INTEEPROM
+0024   1283           00081         BCF     STATUS, RP0             ; BANK 0
+0025   3021           00082         MOVLW   N
+0026   0088           00083         MOVWF   EEDATA
+0027   0A89           00084         INCF    EEADR, F        
+                      00085         EEPROM_WRITE
+                          M 
+0028   1683               M         BSF     STATUS, RP0             ; BANK 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0029   1508               M         BSF     EECON1, WREN            ; EN WR
+                          M         
+002A   3055               M         MOVLW   0X55
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002B   0089               M         MOVWF   EECON2
+002C   30AA               M         MOVLW   0XAA
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002D   0089               M         MOVWF   EECON2
+                          M         
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002E   1488               M         BSF     EECON1, WR                      ; START WR      
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002F   1108               M         BCF     EECON1, WREN
+0030   1283               M         BCF     STATUS, RP0             ; BANK 0
+                          M         
+                      00086         
+0031   1683           00087         BSF     STATUS, RP0                     ; BANK 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0032   1208           00088         BCF     EECON1, EEIF
+0033   1283           00089         BCF     STATUS, RP0             ; BANK 0
+0034   0008           00090         RETURN
+                      00091         
+0035                  00092 ENTRY_POINT
+0035   3000           00093         MOVLW   0x00
+Warning[224]: Use of this instruction is not recommended.
+0036   0066           00094         TRIS    PORTB
+0037   0086           00095         MOVWF   PORTB
+0038   1683           00096         BSF     STATUS, RP0                     ; BANK 1
+0039   3010           00097         MOVLW   0X10
+003A   0085           00098         MOVWF   PORTA
+                      00099         
+003B   30FF           00100         MOVLW   0XFF
+003C   0086           00101         MOVWF   PORTB
+                      00102         
+003D   3031           00103         MOVLW   B'00110001'
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+003E   0081           00104         MOVWF   OPTION_REG      
+003F   1283           00105         BCF     STATUS, RP0             ; BANK 0
+                      00106         
+0040   3000           00107         MOVLW   0X00
+0041   0089           00108         MOVWF   EEADR
+0042   3001           00109         MOVLW   0X01
+0043   0088           00110         MOVWF   EEDATA
+                      00111         
+                      00112         EEPROM_WRITE
+                          M 
+0044   1683               M         BSF     STATUS, RP0             ; BANK 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0045   1508               M         BSF     EECON1, WREN            ; EN WR
+                          M         
+0046   3055               M         MOVLW   0X55
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0047   0089               M         MOVWF   EECON2
+0048   30AA               M         MOVLW   0XAA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0049   0089               M         MOVWF   EECON2
+                          M         
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004A   1488               M         BSF     EECON1, WR                      ; START WR      
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004B   1108               M         BCF     EECON1, WREN
+004C   1283               M         BCF     STATUS, RP0             ; BANK 0
+                          M         
+                      00113         
+004D   3000           00114         MOVLW   0X00
+004E   0085           00115         MOVWF   PORTA
+004F   306A           00116         MOVLW   .256-.150
+0050   0081           00117         MOVWF   TMR0
+                      00118         
+0051   30F8           00119         MOVLW   B'11111000'
+0052   008B           00120         MOVWF   INTCON
+0053                  00121 LOOP
+0053   0000           00122         NOP
+0054   2853           00123         GOTO    LOOP
+                      00124         
+                      00125         END
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+EEPROM_WRITE                      
+ENTRY_POINT                       00000035
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTEEPROM                         00000024
+INTF                              00000001
+INTRB0                            0000000F
+INTRB47                           00000018
+INTTMR0                           0000001F
+INT_VECTOR                        00000001
+IRP                               00000007
+LOOP                              00000053
+N                                 00000021
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RD                                00000000
+RESET_VECTOR                      00000000
+RP0                               00000005
+RP1                               00000006
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TEMP                              0000000C
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+MPASM  5.51                          LAB7.ASM   12-21-2020  22:16:03         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_XT_OSC                           00003FFD
+__16F84                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : X---XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXX----------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    82
+Program Memory Words Free:   942
+
+
+Errors   :     0
+Warnings :     3 reported,     0 suppressed
+Messages :    13 reported,     0 suppressed
+
+

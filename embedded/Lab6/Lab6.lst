@@ -1,0 +1,345 @@
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 #include <p16f84.inc> 
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84 processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00206         LIST
+                      00002 
+  0000002C            00003 CTR equ 0X2C
+  00000010            00004 START equ 0X10
+                      00005 
+                      00006 COPY_CHAR MACRO _CHAR, _ADDR
+                      00007         movlw _CHAR
+                      00008         movwf _ADDR     
+                      00009         endm
+                      00010         
+0000                  00011         ORG   0
+                      00012         
+                      00013 ;       WR 
+                      00014         COPY_CHAR 'S', START + .0
+0000   3053               M         movlw 'S'
+0001   0090               M         movwf START + .0 
+                      00015         COPY_CHAR 't', START + .1
+0002   3074               M         movlw 't'
+0003   0091               M         movwf START + .1 
+                      00016         COPY_CHAR 'o', START + .2
+0004   306F               M         movlw 'o'
+0005   0092               M         movwf START + .2 
+                      00017         COPY_CHAR 'r', START + .3
+0006   3072               M         movlw 'r'
+0007   0093               M         movwf START + .3 
+                      00018         COPY_CHAR 'o', START + .4
+0008   306F               M         movlw 'o'
+0009   0094               M         movwf START + .4 
+                      00019         COPY_CHAR 'z', START + .5
+000A   307A               M         movlw 'z'
+000B   0095               M         movwf START + .5 
+                      00020         COPY_CHAR 'h', START + .6
+000C   3068               M         movlw 'h'
+000D   0096               M         movwf START + .6 
+                      00021         COPY_CHAR 'u', START + .7
+000E   3075               M         movlw 'u'
+000F   0097               M         movwf START + .7 
+                      00022         COPY_CHAR 'k', START + .8
+0010   306B               M         movlw 'k'
+0011   0098               M         movwf START + .8 
+                      00023         
+                      00024         COPY_CHAR 'O', START + .9
+0012   304F               M         movlw 'O'
+0013   0099               M         movwf START + .9 
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00025         COPY_CHAR 'l', START + .10
+0014   306C               M         movlw 'l'
+0015   009A               M         movwf START + .10 
+                      00026         COPY_CHAR 'e', START + .11
+0016   3065               M         movlw 'e'
+0017   009B               M         movwf START + .11 
+                      00027         COPY_CHAR 'k', START + .12
+0018   306B               M         movlw 'k'
+0019   009C               M         movwf START + .12 
+                      00028         COPY_CHAR 's', START + .13
+001A   3073               M         movlw 's'
+001B   009D               M         movwf START + .13 
+                      00029         COPY_CHAR 'a', START + .14
+001C   3061               M         movlw 'a'
+001D   009E               M         movwf START + .14 
+                      00030         COPY_CHAR 'n', START + .15
+001E   306E               M         movlw 'n'
+001F   009F               M         movwf START + .15 
+                      00031         COPY_CHAR 'd', START + .16
+0020   3064               M         movlw 'd'
+0021   00A0               M         movwf START + .16 
+                      00032         COPY_CHAR 'r', START + .17
+0022   3072               M         movlw 'r'
+0023   00A1               M         movwf START + .17 
+                      00033         
+                      00034         COPY_CHAR 'D', START + .18
+0024   3044               M         movlw 'D'
+0025   00A2               M         movwf START + .18 
+                      00035         COPY_CHAR 'm', START + .19
+0026   306D               M         movlw 'm'
+0027   00A3               M         movwf START + .19 
+                      00036         COPY_CHAR 'y', START + .20
+0028   3079               M         movlw 'y'
+0029   00A4               M         movwf START + .20 
+                      00037         COPY_CHAR 't', START + .21
+002A   3074               M         movlw 't'
+002B   00A5               M         movwf START + .21 
+                      00038         COPY_CHAR 'r', START + .22
+002C   3072               M         movlw 'r'
+002D   00A6               M         movwf START + .22 
+                      00039         COPY_CHAR 'o', START + .23
+002E   306F               M         movlw 'o'
+002F   00A7               M         movwf START + .23 
+                      00040         COPY_CHAR 'v', START + .24
+0030   3076               M         movlw 'v'
+0031   00A8               M         movwf START + .24 
+                      00041         COPY_CHAR 'i', START + .25
+0032   3069               M         movlw 'i'
+0033   00A9               M         movwf START + .25 
+                      00042         COPY_CHAR 'c', START + .26
+0034   3063               M         movlw 'c'
+0035   00AA               M         movwf START + .26 
+                      00043         COPY_CHAR 'h', START + .27
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0036   3068               M         movlw 'h'
+0037   00AB               M         movwf START + .27 
+                      00044 
+                      00045 ;       RD
+0038   3010           00046         movlw START
+0039   0084           00047         movwf FSR
+003A   0089           00048         movwf EEADR
+                      00049         
+003B   301C           00050         movlw .28
+003C   00AC           00051         movwf CTR       
+003D                  00052 @LOOP 
+003D   0800           00053         movf INDF, W
+                      00054         
+                      00055 ;       WR EEPROM
+003E   0088           00056         movwf EEDATA
+                      00057         
+003F   1683           00058         bsf STATUS, RP0                 ; BANK 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0040   1508           00059         bsf EECON1, WREN                ; EN WR
+                      00060         
+0041   3055           00061         movlw 0X55
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0042   0089           00062         movwf EECON2
+0043   30AA           00063         movlw 0XAA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0044   0089           00064         movwf EECON2
+                      00065         
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0045   1488           00066         bsf EECON1, WR                  ; START WR
+                      00067         
+                      00068 ;       WAIT WR
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0046   1888           00069         btfsc EECON1, WR
+0047   2846           00070         goto $ - 1
+                      00071         
+0048   1283           00072         bcf STATUS, RP0                 ; BANK 0
+                      00073 
+Message[305]: Using default destination of 1 (file).
+0049   0A84           00074         incf FSR
+Message[305]: Using default destination of 1 (file).
+004A   0A89           00075         incf EEADR
+Message[305]: Using default destination of 1 (file).
+004B   0BAC           00076         decfsz CTR
+004C   283D           00077         goto @LOOP
+                      00078         
+  00000021            00079 num EQU 21
+                      00080         
+                      00081 ;       WR
+004D   3021           00082         movlw num
+004E   0088           00083         movwf EEDATA
+                      00084         
+004F   303F           00085         movlw 0X3F
+0050   0089           00086         movwf EEADR
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00087         
+0051   1683           00088         bsf STATUS, RP0                 ; BANK 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0052   1508           00089         bsf EECON1, WREN                ; EN WR
+                      00090         
+0053   3055           00091         movlw 0X55
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0054   0089           00092         movwf EECON2
+0055   30AA           00093         movlw 0XAA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0056   0089           00094         movwf EECON2
+                      00095         
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0057   1488           00096         bsf EECON1, WR                  ; START WR
+                      00097         
+                      00098 ;       READ EEPROM
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0058   1408           00099         bsf EECON1, RD
+                      00100                 
+                      00101 ;       WAIT WR
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0059   1888           00102         btfsc EECON1, WR
+005A   2859           00103         goto $ - 1      
+                      00104         
+005B   1283           00105         bcf STATUS, RP0                 ; BANK 0
+005C   0808           00106         movf EEDATA, W
+                      00107         
+                      00108         END
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+@LOOP                             0000003D
+C                                 00000000
+COPY_CHAR                         
+CTR                               0000002C
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+START                             00000010
+STATUS                            00000003
+T0CS                              00000005
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84                           00000001
+num                               00000021
+MPASM  5.51                          LAB6.ASM   12-21-2020  20:21:23         PAGE  7
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXX--- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    93
+Program Memory Words Free:   931
+
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :    14 reported,     0 suppressed
+
+

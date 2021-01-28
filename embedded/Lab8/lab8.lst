@@ -1,0 +1,249 @@
+MPASM  5.51                          LAB8.ASM   12-22-2020  11:16:01         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 #include <p16c71.inc>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16C71 processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00215         LIST
+                      00002 
+  00000020            00003 TEMP equ 0x20
+  00000021            00004 U1      equ 0x21
+                      00005 
+0000                  00006 RESET_VECTOR
+0000                  00007         ORG     0
+0000   2817           00008         GOTO    ENTRY_POINT
+                      00009         
+0001                  00010 DELAY30US
+0001   3032           00011         MOVLW   .150 / .3
+0002   00A0           00012         MOVWF   TEMP
+0003                  00013 DEC
+0003   0BA0           00014         DECFSZ  TEMP, F
+0004   2803           00015         GOTO    DEC
+0005   0008           00016         RETURN
+                      00017         
+0006                  00018 INCREMENT
+0006   0AA0           00019         INCF    TEMP, 1
+0007   0008           00020         RETURN
+                      00021         
+0008                  00022 SWAP_RB0_RB1
+Message[305]: Using default destination of 1 (file).
+0008   0886           00023         MOVF PORTB
+0009   1880           00024         BTFSC W, 1
+000A   1506           00025         BSF PORTB, 2
+000B   1106           00026         BCF PORTB, 2
+000C   1900           00027         BTFSC W, 2
+000D   1486           00028         BSF PORTB, 1
+000E   1086           00029         BCF PORTB, 1
+000F   0008           00030         RETURN
+0010                  00031 START_ADC
+0010   0088           00032         MOVWF   ADCON0
+0011   2001           00033         CALL    DELAY30US
+0012   1508           00034         BSF     ADCON0, GO_DONE
+0013                  00035 WAIT_ADC
+0013   1908           00036         BTFSC   ADCON0, GO_DONE
+0014   2813           00037         GOTO    WAIT_ADC
+0015   0809           00038         MOVF    ADRES, W
+0016   0008           00039         RETURN
+                      00040         
+0017                  00041 ENTRY_POINT
+0017   1683           00042         BSF     STATUS, RP0                     ; BANK 1
+0018   3000           00043         MOVLW   0X00
+MPASM  5.51                          LAB8.ASM   12-22-2020  11:16:01         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0019   0088           00044         MOVWF   ADCON1
+001A   1283           00045         BCF     STATUS, RP0             ; BANK 0
+                      00046         
+001B   30C9           00047         MOVLW   B'11001001'                     ; канал 1
+001C   2010           00048         CALL    START_ADC
+001D   00A1           00049         MOVWF   U1
+                      00050         
+001E   30D1           00051         MOVLW   B'11010001'             ; канал 2
+001F   2010           00052         CALL    START_ADC
+                      00053         
+0020   0221           00054         SUBWF   U1, W
+0021   1903           00055         BTFSC   STATUS, Z
+0022   2829           00056         GOTO    EQUAL
+                      00057         
+0023   1C03           00058         BTFSS   STATUS, C
+0024   2827           00059         GOTO    U1_BELOW
+0025                  00060 U1_ABOVE
+0025   2006           00061         CALL    INCREMENT
+0026   2817           00062         GOTO    ENTRY_POINT
+0027                  00063 U1_BELOW
+0027   2006           00064         CALL    INCREMENT
+0028   2817           00065         GOTO    ENTRY_POINT
+0029                  00066 EQUAL
+0029   3000           00067         MOVLW   0x00
+Warning[224]: Use of this instruction is not recommended.
+002A   0066           00068         TRIS    PORTB
+002B   300A           00069         MOVLW   0xA
+002C   0086           00070         MOVWF   PORTB
+002D   2008           00071         CALL    SWAP_RB0_RB1
+002E   30FF           00072         MOVLW   0xFF
+Warning[224]: Use of this instruction is not recommended.
+002F   0066           00073         TRIS    PORTB
+0030   2817           00074         GOTO    ENTRY_POINT
+                      00075         END
+MPASM  5.51                          LAB8.ASM   12-22-2020  11:16:01         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCON0                            00000008
+ADCON1                            00000088
+ADCS0                             00000006
+ADCS1                             00000007
+ADIE                              00000006
+ADIF                              00000001
+ADON                              00000000
+ADRES                             00000009
+C                                 00000000
+CHS0                              00000003
+CHS1                              00000004
+DC                                00000001
+DEC                               00000003
+DELAY30US                         00000001
+ENTRY_POINT                       00000017
+EQUAL                             00000029
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+GO_NOT_DONE                       00000002
+INCREMENT                         00000006
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCFG0                             00000000
+PCFG1                             00000001
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+MPASM  5.51                          LAB8.ASM   12-22-2020  11:16:01         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RESET_VECTOR                      00000000
+RP0                               00000005
+RP1                               00000006
+START_ADC                         00000010
+STATUS                            00000003
+SWAP_RB0_RB1                      00000008
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TEMP                              00000020
+TMR0                              00000001
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+U1                                00000021
+U1_ABOVE                          00000025
+U1_BELOW                          00000027
+W                                 00000000
+WAIT_ADC                          00000013
+Z                                 00000002
+_CONFIG1                          00002007
+_CP_OFF                           00003FFF
+_CP_ON                            00003FEF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_RC                          00003FFF
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FF7
+MPASM  5.51                          LAB8.ASM   12-22-2020  11:16:01         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_PWRTE_ON                         00003FFF
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16C71                           00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX X---------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    49
+Program Memory Words Free:   975
+
+
+Errors   :     0
+Warnings :     2 reported,     0 suppressed
+Messages :     2 reported,     0 suppressed
+
+
