@@ -1,0 +1,66 @@
+import random
+
+f = open("data.csv", "w")
+
+rowsCount = 3461;
+columnsCount = 2;
+# frequency of expected values equal to '1'
+expectedOneAmountPer100 = 55
+pieceAmount = rowsCount / 100
+lastPieceCount = rowsCount % 100
+lowestNum = 1100
+highestNum = 1200
+avgNum = (highestNum + lowestNum) / 2
+indexesList = []
+for currentPiece in range(int(rowsCount / 100)):
+  rowData = ""
+  randomCount = 0
+
+  while len(indexesList) < expectedOneAmountPer100:
+    randValue = random.randint(0, 99)
+    if indexesList.count(randValue) == 0:
+      indexesList.append(randValue)
+
+  for randomRowIndex in range(100):
+    for colIndex in range(columnsCount - 1):
+      insertValue = 0
+      if randomRowIndex in indexesList:
+        if random.randint(0, 1) == 1:
+          insertValue = random.randint(avgNum, highestNum)
+        else:
+          insertValue = random.randint(lowestNum, highestNum)  
+      else:
+        insertValue = random.randint(lowestNum, highestNum)
+      rowData = rowData + str(insertValue) + ";"
+    if randomRowIndex in indexesList:
+      rowData = rowData + '1'
+    else:
+      rowData = rowData + '0'
+
+    rowData = rowData + "\n"
+  f.write(rowData)
+  indexesList = []
+
+rowData = ""
+lastAmountOfOne = int((lastPieceCount / 100) * expectedOneAmountPer100)
+print(lastPieceCount)
+print(lastAmountOfOne)
+indexesList = []
+
+while len(indexesList) < expectedOneAmountPer100:
+    randValue = random.randint(0, 99)
+    if indexesList.count(randValue) == 0:
+      indexesList.append(randValue)
+
+for randomRowIndex in range(lastPieceCount):
+  for colIndex in range(columnsCount - 1):
+    rowData = rowData + str(random.randint(1100, 1200)) + ";"
+  if randomRowIndex in indexesList:
+    rowData = rowData + '1'
+  else:
+    rowData = rowData + '0'
+  rowData = rowData + "\n"
+rowData = rowData[:-1]
+f.write(rowData)
+
+f.close()

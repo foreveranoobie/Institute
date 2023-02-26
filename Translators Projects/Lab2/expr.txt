@@ -1,0 +1,6 @@
+I->A
+A->c=V
+V->PE|(PE)SV|(PE)|(V)
+E->SPE|$
+P->a|b
+S->+|-|*|/

@@ -1,0 +1,20 @@
+input states:
+x1 = space symbol
+x2 = identifier
+x3 = assignment sign ("=")
+x4 = operation (+,-,*,\)
+x5 = left bracket
+x6 = right bracket
+
+output status:
+y0 = no lexeme parsed
+y1 = lexeme parsed
+y2 = parsing error
+y3 = identifier parsed
+
+current status:
+s0 = parsing identifier
+s1 = parsing operand
+s2 = waiting for lexeme
+s3 = waiting for identifier
+s4 = waiting for operand

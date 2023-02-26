@@ -1,0 +1,166 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import math
+
+from scipy.stats import norm
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import classification_report
+from sklearn.metrics import roc_curve, auc
+
+def calculateRocCurves(scores, predicted):
+  maxValue = scores[0]
+  thresholdsArr = []
+  #calculate max value and save all scores
+  for score in scores:
+    if thresholdsArr.count(score) == 0:
+      thresholdsArr.append(score)
+    if maxValue < score:
+      maxValue = score
+  maxValue += 1
+  thresholdsArr.append(maxValue)
+  thresholdsArr.sort(reverse=True)
+  tprArr = []
+  fprArr = []
+  cpArr = []
+  cnArr = []
+  accArr = []
+  precisionArr = []
+  recallArr = []
+  f1Arr = []
+  for thresholdIndex in range(len(thresholdsArr)):
+    currentThreshold = thresholdsArr[thresholdIndex]
+    currentTP = 0
+    currentFN = 0
+    currentTN = 0
+    currentFP = 0
+    currentCP = 0
+    currentCN = 0
+    for objectIndex in range(len(scores)):
+      value = int(scores[objectIndex])
+      target = int(predicted[objectIndex])
+      if target == 1:
+        currentCP += 1
+        if value >= currentThreshold:
+          currentTP += 1
+        else:
+          currentFN += 1
+      else:
+        currentCN += 1
+        if value < currentThreshold:
+          currentTN += 1
+        else:
+          currentFP += 1;
+    if currentTP + currentFN > 0:
+      tprArr.append(round(currentTP / (currentTP + currentFN), 5))
+    else:
+      tprArr.append(0.)
+    
+    if currentFP + currentTN > 0:
+      fprArr.append(round(currentFP / (currentFP + currentTN), 5))
+    else:
+      fprArr.append(0.)
+    
+    #calculate other parameters for current threshold
+    cpArr.append(currentCP)
+    cnArr.append(currentCN)
+    accArr.append(round((currentTP + currentTN)/(currentCP + currentCN), 4))
+    if currentTP + currentFP:
+      precisionArr.append(round(currentTP / (currentTP + currentFP), 4))
+    else:
+      precisionArr.append(0.)
+    recallArr.append(round(currentTP / (currentTP + currentFN), 4))
+    f1Arr.append(round((2 * currentTP) / ((2 * currentTP) + currentFP + currentFN), 4))
+  
+  print("Condition Positive result = %f" % cpArr[0])
+  print("Condition Negative result = %f" % cnArr[0])
+  print("Accuracy result = %s" % np.append(np.array([]), accArr))
+  print("Precision result = %s" % np.append(np.array([]), precisionArr))
+  print("Recall result = %s" % np.append(np.array([]), recallArr))
+  print("F1 Score result = %s" % np.append(np.array([]),f1Arr))
+  return np.append(np.array([]), fprArr), np.append(np.array([]), tprArr), np.append(np.array([]), thresholdsArr)
+
+
+def calculateCurrentRectangleSquare(x, y):
+  return x * y
+
+def calculateAucByLeftHandRule(tprList, fprList):
+  aucSum = 0;
+  for pointIndex in range(tprList.size - 1):
+    aucSum += calculateCurrentRectangleSquare(tprList[pointIndex], fprList[pointIndex + 1] - fprList[pointIndex])
+  return aucSum
+
+def euclideanDist(x1, y1, x2, y2):
+  return math.sqrt(pow((x2 - x1), 2) + (pow((y2 - y1),2)))
+
+#read lines of data
+f = open("data.csv", "r")
+text = f.readlines()
+objects = []
+for line in text:
+  strapline = line.strip().split(';')
+  objects.append(strapline) 
+f.close()
+
+targets = []
+values = []
+for object in objects:
+  targets.append(int(object[1]))
+  values.append(int(object[0]))
+
+#fpr, tpr, thresholds = roc_curve(targets, values)
+fpr, tpr, thresholds = calculateRocCurves(values, targets)
+print("FPRs = %s" % fpr)
+print("TPRs = %s" % tpr)
+print("Thresholds = %s" % thresholds)
+
+index = 0
+distances = []
+for point in tpr:
+  distances.append(euclideanDist(0, 1, point, tpr[index]))
+  index += 1
+
+index = 0
+minIndex = 0
+minDistance = distances[0]
+for distance in distances:
+  if distance < minDistance:
+    minIndex = index
+    minDistance = distance
+  index += 1
+
+print("Minimal distance to {FPR= 0; TPR=1}, cut-off = %f\nThreshold value = %f\n{TPR ; FPR} = {%f ; %f}" 
+      % (minDistance, thresholds[minIndex], tpr[minIndex], fpr[minIndex]))
+
+aucSquare = calculateAucByLeftHandRule(tpr, fpr)
+print("Calculated AUC by left-hand rule = %f" % aucSquare)
+
+#print plot
+# Calculate ROC Area Under the Curve (AUC) from FPR and TPR data points
+roc_auc = auc(fpr, tpr)
+
+# Calculate precision and recall from true labels vs score values
+precision, recall, _ = precision_recall_curve(targets, values)
+
+plt.figure(figsize=(8, 3))
+
+plt.subplot(1,2,1)
+lw = 2
+plt.plot(fpr, tpr, color='darkorange', lw=lw, label='ROC curve (AUC = %0.4f | Left-Hand calculated AUC = %0.4f)' % (roc_auc, aucSquare))
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.legend(loc="lower right")
+plt.grid(True)
+
+left  = 0.125  # the left side of the subplots of the figure
+right = 0.9    # the right side of the subplots of the figure
+bottom = 0.1   # the bottom of the subplots of the figure
+top = 0.9      # the top of the subplots of the figure
+wspace = 0.5   # the amount of width reserved for blank space between subplots
+hspace = 0.2   # the amount of height reserved for white space between subplots
+plt.subplots_adjust(left, bottom, right, top, wspace, hspace)
+plt.show()
